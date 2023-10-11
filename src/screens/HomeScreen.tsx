@@ -48,7 +48,9 @@ const getCoffeeList = (category: string, data: any) => {
 };
 
 const HomeScreen = ({navigation}: any) => {
-  const {CoffeeList, BeanList} = useStore((state: any) => state);
+  const {CoffeeList, BeanList, calculateCartPrice, addToCart} = useStore(
+    (state: any) => state,
+  );
   const [categories, setCategories] = useState(
     getCategoriesFromData(CoffeeList),
   );
@@ -89,6 +91,31 @@ const HomeScreen = ({navigation}: any) => {
     setSearchText('');
     setCategoryIndex({index: 0, category: categories[0]});
     setSortedCoffee([...CoffeeList]);
+  };
+
+  const addToCartHandler = ({
+    id,
+    index,
+    name,
+    roasted,
+    imagelink_square,
+    special_ingredient,
+    type,
+    prices,
+  }: any) => {
+    addToCart({
+      id,
+      index,
+      name,
+      roasted,
+      imagelink_square,
+      special_ingredient,
+      type,
+      prices,
+    });
+
+    // Total price in cart
+    calculateCartPrice();
   };
 
   return (
@@ -208,8 +235,8 @@ const HomeScreen = ({navigation}: any) => {
                 imagelink_square={item.imagelink_square}
                 special_ingredient={item.special_ingredient}
                 average_rating={item.average_rating}
-                price={item.prices}
-                buttonPressHandler={item.buttonPressHandler}
+                price={item.prices[2]}
+                buttonPressHandler={addToCartHandler}
               />
             </TouchableOpacity>
           )}
