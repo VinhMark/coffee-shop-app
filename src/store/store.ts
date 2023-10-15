@@ -63,7 +63,6 @@ export const useStore = create(
           produce(state => {
             let totalPrice = 0;
             const cartList = state.CartList;
-
             for (let i = 0; i < cartList.length; i++) {
               let tempPrice = 0;
               for (let j = 0; j < cartList[i].prices.length; j++) {
@@ -110,6 +109,71 @@ export const useStore = create(
                 return true;
               }
             });
+          }),
+        ),
+      incrementCartItemQuantity: (id: string, size: string) =>
+        set(
+          produce((state: any) => {
+            state.CartList.some((item: any) => {
+              if (item.id === id) {
+                const index = item.prices.findIndex(
+                  (p: any) => p.size === size,
+                );
+                item.prices[index].quantity++;
+                return true;
+              }
+            });
+          }),
+        ),
+      decrementCartItemQuantity: (id: string, size: string) =>
+        set(
+          produce((state: any) => {
+            state.CartList.some((item: any) => {
+              if (item.id === id) {
+                const index = item.prices.findIndex(
+                  (p: any) => p.size === size,
+                );
+
+                if (item.prices[index].quantity > 1) {
+                  item.prices[index].quantity--;
+                } else {
+                  item.prices.splice(index, 1);
+                }
+                return true;
+              }
+            });
+          }),
+        ),
+      addToOrderHistoryListFromCart: () =>
+        set(
+          produce((state: any) => {
+            let temp = state.CartList.reduce(
+              (accumulator: number, currentValue: any) =>
+                accumulator + parseFloat(currentValue.ItemPrice),
+              0,
+            );
+
+            if (state.OrderHistoryList.length > 0) {
+              state.OrderHistoryList.unshift({
+                OrderDate: `${new Date().toDateString()} ${new Date().toLocaleDateString()}`,
+                CartList: state.CartList,
+                CartListPrice: temp.tofixed(2).toString(),
+              });
+            } else {
+              state.OrderHistoryList.push({
+                OrderDate: `${new Date().toDateString()} ${new Date().toLocaleDateString()}`,
+                CartList: state.CartList,
+                CartListPrice: temp.tofixed(2).toString(),
+              });
+            }
+
+            state.CartList = [];
+          }),
+        ),
+      clearData: () =>
+        set(
+          produce((state: any) => {
+            state.CartList = [];
           }),
         ),
     }),
