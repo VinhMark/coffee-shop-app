@@ -128,16 +128,16 @@ export const useStore = create(
       decrementCartItemQuantity: (id: string, size: string) =>
         set(
           produce((state: any) => {
-            state.CartList.some((item: any) => {
+            state.CartList.some((item: any, index: number) => {
               if (item.id === id) {
-                const index = item.prices.findIndex(
+                const priceIndex = item.prices.findIndex(
                   (p: any) => p.size === size,
                 );
 
-                if (item.prices[index].quantity > 1) {
-                  item.prices[index].quantity--;
+                if (item.prices[priceIndex].quantity > 1) {
+                  item.prices[priceIndex].quantity--;
                 } else {
-                  item.prices.splice(index, 1);
+                  state.CartList.splice(index, 1);
                 }
                 return true;
               }
