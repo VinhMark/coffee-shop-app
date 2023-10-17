@@ -157,13 +157,13 @@ export const useStore = create(
               state.OrderHistoryList.unshift({
                 OrderDate: `${new Date().toDateString()} ${new Date().toLocaleDateString()}`,
                 CartList: state.CartList,
-                CartListPrice: temp.tofixed(2).toString(),
+                CartListPrice: temp.toFixed(2).toString(),
               });
             } else {
               state.OrderHistoryList.push({
                 OrderDate: `${new Date().toDateString()} ${new Date().toLocaleDateString()}`,
                 CartList: state.CartList,
-                CartListPrice: temp.tofixed(2).toString(),
+                CartListPrice: temp.toFixed(2).toString(),
               });
             }
 

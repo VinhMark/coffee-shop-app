@@ -21,7 +21,7 @@ const CartScreen = ({navigation}: any) => {
   const tabBarHeight = useBottomTabBarHeight();
 
   const buttonPressHandler = () => {
-    navigation.push('Payment');
+    navigation.push('Payment', {price: CartPrice, currency: '$'});
   };
 
   return (
